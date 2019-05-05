@@ -566,7 +566,11 @@ abstract class Kohana_Database {
 		if (strpos($value, '"') !== FALSE)
 		{
 			// Quote the column in FUNC("ident") identifiers
-			return preg_replace('/"(.+?)"/e', '$this->quote_identifier("$1")', $value);
+			return preg_replace_callback(
+				'/"(.+?)"/',
+				function($match) { return $this->quote_identifier($match[1]); },
+				$value
+			);
 		}
 		elseif (strpos($value, '.') !== FALSE)
 		{
